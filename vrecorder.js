@@ -5,6 +5,7 @@ const controllerWrapper = document.querySelector('.controllers')
 const State = ['Initial', 'Record', 'Download']
 let stateIndex = 0
 let mediaRecorder, chunks = [], audioURL = ''
+let userInfo = ""
 
 // mediaRecorder setup for audio
 if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
@@ -60,11 +61,13 @@ const saveUserInfo = (filename) => {
     const name = prompt("Please enter your name:");
     const email = prompt("Please enter your email:");
     const className = prompt("Please enter the name of your class:");
+    const outFormat = prompt("Please enter the desired output format (pdf is default");
 
     const timestamp = filename.match(/(\d+)/)[0]; //extracxt
     const userInfoFilename = `userinfo_${timestamp}_${email}`;
     
-    const userInfo = `Name: ${name}\nEmail: ${email}\nClass: ${className}\nAudio File: ${filename}`;
+    userInfo = `Name: ${name}\nEmail: ${email}\nClass: ${className}\naudioFile: ${filename}\nFormat: ${outFormat}\n`;
+    
     const userInfoBlob = new Blob([userInfo], { type: 'text/plain' });
 
     const userInfoLink = document.createElement('a');
@@ -106,6 +109,46 @@ const addAudio = () => {
     display.append(audio)
 }
 
+const createMailtoLink = () => {
+    console.log('Creating mailto link...');
+
+    const recipient = 'js6507@columbia.edu';
+    const subject = 'audio recording';
+    
+    console.log('Retrieved user info:', userInfo);
+
+    // Construct the email body using the saved user info
+    const body = `Pls. attach the audiofile listed below :\n\nUserInfo: ${userInfo}\n`;
+    
+    // Encode the components to ensure proper formatting in the mailto link
+    const encodedRecipient = encodeURIComponent(recipient);
+    const encodedSubject = encodeURIComponent(subject);
+    const encodedBody = encodeURIComponent(body);
+    
+    // Construct the mailto link
+    const mailtoLink = `mailto:${encodedRecipient}?subject=${encodedSubject}&body=${encodedBody}`;
+    
+    console.log('Mailto link created:', mailtoLink);
+
+    return mailtoLink;
+}
+
+
+// Function to mail files
+const mailFiles = () => {
+    //console.log('Retrieved user info:', userInfo);
+    addMessage('Mailing files just attach the audio file')
+    const mailtoLink = createMailtoLink();
+    const newWindow = window.open(mailtoLink, '_blank');
+    if (newWindow) {
+            newWindow.opener = null; // Prevent the new window from accessing the parent window
+    } else {
+            // If the popup blocker prevents opening the new window, fallback to opening the link in the default browser
+            window.location.href = mailtoLink;
+    }
+    return
+}
+
 const application = (index) => {
     switch (State[index]) {
         case 'Initial':
@@ -130,6 +173,7 @@ const application = (index) => {
             addAudio()
             addButton('download', 'downloadAudio()', 'Download Audio')
             addButton('record', 'record()', 'Record Again')
+            addButton('mail', 'mailFiles()', 'Mail Files') // Add the mail button
             break
 
         default:
