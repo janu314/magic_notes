@@ -60,8 +60,8 @@ const stopRecording = () => {
 const saveUserInfo = (filename) => {
     const name = prompt("Please enter your name:");
     const email = prompt("Please enter your email:");
-    const className = prompt("Please enter the name of your class:");
-    const outFormat = prompt("Please enter the desired output format (pdf is default");
+    const className = prompt("(Optional) Pls enter the name of your class:");
+    const outFormat = prompt("(Optional) Pls. enter the desired output format (pdf is default");
 
     const timestamp = filename.match(/(\d+)/)[0]; //extracxt
     const userInfoFilename = `userinfo_${timestamp}_${email}`;
@@ -86,6 +86,7 @@ const downloadAudio = () => {
     downloadLink.setAttribute('download', filename); // Set filename
     downloadLink.setAttribute('target', '_blank'); // Open in new tab
     downloadLink.click();
+    mailFiles();
 }
 
 const addButton = (id, funString, text) => {
@@ -171,9 +172,8 @@ const application = (index) => {
             clearDisplay()
 
             addAudio()
-            addButton('download', 'downloadAudio()', 'Download Audio')
+            addButton('download', 'downloadAudio()', 'Download & Mail Audio')
             addButton('record', 'record()', 'Record Again')
-            addButton('mail', 'mailFiles()', 'Mail Files') // Add the mail button
             break
 
         default:
