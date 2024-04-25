@@ -89,13 +89,18 @@ const downloadAudio = () => {
     mailFiles();
 }
 
+
 const addButton = (id, funString, text) => {
     const btn = document.createElement('button')
     btn.id = id
     btn.setAttribute('onclick', funString)
     btn.textContent = text
+    btn.style.width = "auto"; // Set width to "auto" for dynamic sizing
+    btn.style.height = "auto"; // Set height to "auto" for dynamic sizing
+    btn.style.padding = "10px 20px"; // Set padding for the button (adjust as needed)
     controllerWrapper.append(btn)
 }
+
 
 const addMessage = (text) => {
     const msg = document.createElement('p')
@@ -113,7 +118,7 @@ const addAudio = () => {
 const createMailtoLink = () => {
     console.log('Creating mailto link...');
 
-    const recipient = 'magicnotes314@gmail.com';
+    const recipient = 'js6507@columbia.edu';
     const subject = 'audio recording';
     
     console.log('Retrieved user info:', userInfo);
