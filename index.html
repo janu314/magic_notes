@@ -3,6 +3,43 @@
 <head>
     <meta charset="utf-8">
     <title>Voice Recorder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative; /* Added position relative for absolute positioning */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .text {
+            margin-bottom: 20px;
+        }
+
+        .image {
+            position: absolute; /* Positioning the image absolutely */
+            top: 0; /* Aligning to the top */
+            right: 0; /* Aligning to the right */
+            width: 80px; /* Adjust the width as needed */
+            margin-top: 0px; /* Adding some margin from the top */
+            margin-right: 20px; /* Adding some margin from the right */
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -14,6 +51,24 @@
 
         </div>
     </div>
+
+    <!-- Start of the second HTML page -->
+    <div class="container">
+        <h1>Magic Notes</h1>
+        <div class="text">
+            <p> Introducing Magic Notes: the ultimate tool for capturing, transcribing, and transforming lectures into stunning notes within your preferred note-taking app like GoodNotes, Notability, or Notion. Organize your thoughts, ideas, and tasks effortlessly with its user-friendly interface and robust features.
+                </p>
+            <p>Whether you're a student, professional, or creative individual, Magic Notes is designed to streamline your note-taking process and enhance your productivity.</p>
+        </div>
+        <div class="image">
+            <img src="myLogo.jpg" alt="Magic Notes">
+        </div>
+    </div>
+    <!-- End of the second HTML page -->
+
 </body>
 <script src="vrecorder.js"></script>
 </html>
+
+
+
