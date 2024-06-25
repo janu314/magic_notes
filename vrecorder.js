@@ -54,17 +54,14 @@ const stopRecording = () => {
     application(stateIndex)
 }
 
-const saveUserInfo = (filename) => {
-    const name = prompt("Please enter patient first and last names:");
+const saveUserInfo = (filename, name, sanitizedName, timestamp) => {
     const DOB = prompt("Please enter patient DOB:");
-    const drName = prompt("(Optional) Please enter the name of the Physician: (deafults to Dr Pollikal") || "Dr_Pollikal";
-    const adm_date = prompt("(Optional) Please enter the date of first visit (dfeualts to today)") || new Date().toLocaleDateString('en-US');
+    const drName = prompt("(Optional) Please enter the name of the Physician: (defaults to Dr Pollikal)") || "Dr_Pollikal";
+    const adm_date = prompt("(Optional) Please enter the date of first visit (defaults to today)") || new Date().toLocaleDateString('en-US');
 
-    const timestamp = filename.match(/(\d+)/)[0]; // extract
-    const sanitizedName = name.replace(/\s+/g, '_'); // replace spaces with underscores
     const userInfoFilename = `userinfo_${timestamp}_${sanitizedName}`;
 
-    userInfo = `Name: ${name}\nDOB: ${DOB}\nPhys_Name: ${drName}\naudioFile: ${filename}\nDate of Admission: ${adm_date}\n`;
+    userInfo = `Patient Name: ${name}\nDOB: ${DOB}\nPhys_Name: ${drName}\naudioFile: ${filename}\nDate of Admission: ${adm_date}\n`;
 
     const userInfoBlob = new Blob([userInfo], { type: 'text/plain' });
 
@@ -75,9 +72,11 @@ const saveUserInfo = (filename) => {
 }
 
 const downloadAudio = () => {
-    const timestamp = new Date().getTime(); // Get current timestamp
-    const filename = 'audio_' + timestamp + '.ogg'; // Construct filename using timestamp
-    saveUserInfo(filename);
+    const timestamp = new Date().toISOString().replace(/[-:.]/g, ''); // Consistent timestamp format: YYYYMMDDTHHMMSS
+    const name = prompt("Please enter patient first and last names:"); // Prompt for name here to sanitize it
+    const sanitizedName = name.replace(/\s+/g, '_'); // replace spaces with underscores
+    const filename = `audio_${sanitizedName}_${timestamp}.ogg`; // Construct filename using sanitized name and timestamp
+    saveUserInfo(filename, name, sanitizedName, timestamp);
     const downloadLink = document.createElement('a');
     downloadLink.href = audioURL;
     downloadLink.setAttribute('download', filename); // Set filename
@@ -185,4 +184,3 @@ const application = (index) => {
 }
 
 application(stateIndex)
-
