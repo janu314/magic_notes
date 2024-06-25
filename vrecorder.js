@@ -8,7 +8,7 @@ let mediaRecorder, chunks = [], audioURL = ''
 let userInfo = ""
 
 // mediaRecorder setup for audio
-if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     console.log('mediaDevices supported..')
 
     navigator.mediaDevices.getUserMedia({
@@ -21,16 +21,15 @@ if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
         }
 
         mediaRecorder.onstop = () => {
-            const blob = new Blob(chunks, {'type': 'audio/ogg; codecs=opus'})
+            const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' })
             chunks = []
             audioURL = window.URL.createObjectURL(blob)
             document.querySelector('audio').src = audioURL
-
         }
     }).catch(error => {
-        console.log('Following error has occured : ',error)
+        console.log('Following error has occurred: ', error)
     })
-}else{
+} else {
     stateIndex = ''
     application(stateIndex)
 }
@@ -52,22 +51,21 @@ const record = () => {
 const stopRecording = () => {
     stateIndex = 2
     mediaRecorder.stop()
-    application(stateIndex);
-    
+    application(stateIndex)
 }
 
-
 const saveUserInfo = (filename) => {
-    const name = prompt("Please enter your name:");
-    const email = prompt("Please enter your email:");
-    const className = prompt("(Optional) Pls enter the name of your class:");
-    const outFormat = prompt("(Optional) Pls. enter the desired output format (pdf is default");
+    const name = prompt("Please enter patient first and last names:");
+    const DOB = prompt("Please enter patient DOB:");
+    const drName = prompt("(Optional) Please enter the name of the Physician:");
+    const adm_date = prompt("(Optional) Please enter the date of first visit");
 
-    const timestamp = filename.match(/(\d+)/)[0]; //extracxt
-    const userInfoFilename = `userinfo_${timestamp}_${email}`;
-    
-    userInfo = `Name: ${name}\nEmail: ${email}\nClass: ${className}\naudioFile: ${filename}\nFormat: ${outFormat}\n`;
-    
+    const timestamp = filename.match(/(\d+)/)[0]; // extract
+    const sanitizedName = name.replace(/\s+/g, '_'); // replace spaces with underscores
+    const userInfoFilename = `userinfo_${timestamp}_${sanitizedName}`;
+
+    userInfo = `Name: ${name}\nDOB: ${DOB}\nPhys_Name: ${drName}\naudioFile: ${filename}\nDate of Admission: ${adm_date}\n`;
+
     const userInfoBlob = new Blob([userInfo], { type: 'text/plain' });
 
     const userInfoLink = document.createElement('a');
@@ -75,7 +73,6 @@ const saveUserInfo = (filename) => {
     userInfoLink.setAttribute('download', `${userInfoFilename}.txt`);
     userInfoLink.click();
 }
-
 
 const downloadAudio = () => {
     const timestamp = new Date().getTime(); // Get current timestamp
@@ -89,7 +86,6 @@ const downloadAudio = () => {
     mailFiles();
 }
 
-
 const addButton = (id, funString, text) => {
     const btn = document.createElement('button')
     btn.id = id
@@ -100,7 +96,6 @@ const addButton = (id, funString, text) => {
     btn.style.padding = "10px 20px"; // Set padding for the button (adjust as needed)
     controllerWrapper.append(btn)
 }
-
 
 const addMessage = (text) => {
     const msg = document.createElement('p')
@@ -118,39 +113,38 @@ const addAudio = () => {
 const createMailtoLink = () => {
     console.log('Creating mailto link...');
 
-    const recipient = 'js6507@columbia.edu';
+    const recipient = 'janu@magicnotesai.com';
     const subject = 'audio recording';
-    
+
     console.log('Retrieved user info:', userInfo);
 
     // Construct the email body using the saved user info
     const body = `Pls. attach the audiofile listed below :\n\nUserInfo: ${userInfo}\n`;
-    
+
     // Encode the components to ensure proper formatting in the mailto link
     const encodedRecipient = encodeURIComponent(recipient);
     const encodedSubject = encodeURIComponent(subject);
     const encodedBody = encodeURIComponent(body);
-    
+
     // Construct the mailto link
     const mailtoLink = `mailto:${encodedRecipient}?subject=${encodedSubject}&body=${encodedBody}`;
-    
+
     console.log('Mailto link created:', mailtoLink);
 
     return mailtoLink;
 }
 
-
 // Function to mail files
 const mailFiles = () => {
-    //console.log('Retrieved user info:', userInfo);
-    addMessage('Mailing files just attach the audio file')
+    // console.log('Retrieved user info:', userInfo);
+    addMessage('Mailing files, just attach the audio file')
     const mailtoLink = createMailtoLink();
     const newWindow = window.open(mailtoLink, '_blank');
     if (newWindow) {
-            newWindow.opener = null; // Prevent the new window from accessing the parent window
+        newWindow.opener = null; // Prevent the new window from accessing the parent window
     } else {
-            // If the popup blocker prevents opening the new window, fallback to opening the link in the default browser
-            window.location.href = mailtoLink;
+        // If the popup blocker prevents opening the new window, fallback to opening the link in the default browser
+        window.location.href = mailtoLink;
     }
     return
 }
@@ -188,7 +182,7 @@ const application = (index) => {
             addMessage('Your browser does not support mediaDevices')
             break;
     }
-
 }
 
 application(stateIndex)
+
