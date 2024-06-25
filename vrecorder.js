@@ -57,8 +57,8 @@ const stopRecording = () => {
 const saveUserInfo = (filename) => {
     const name = prompt("Please enter patient first and last names:");
     const DOB = prompt("Please enter patient DOB:");
-    const drName = prompt("(Optional) Please enter the name of the Physician:");
-    const adm_date = prompt("(Optional) Please enter the date of first visit");
+    const drName = prompt("(Optional) Please enter the name of the Physician: (deafults to Dr Pollikal") || "Dr_Pollikal";
+    const adm_date = prompt("(Optional) Please enter the date of first visit (dfeualts to today)") || new Date().toLocaleDateString('en-US');
 
     const timestamp = filename.match(/(\d+)/)[0]; // extract
     const sanitizedName = name.replace(/\s+/g, '_'); // replace spaces with underscores
